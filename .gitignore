@@ -2,3 +2,4 @@ node_modules/
 dist/
 .superpowers/
 *.sand
+.worktrees/
