@@ -1,5 +1,7 @@
 import './materials/stone';
 import './materials/sand';
+import './materials/water';
+import './materials/oil';
 
 import { Grid } from './simulation/grid';
 import { Renderer } from './simulation/renderer';
