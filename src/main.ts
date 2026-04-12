@@ -2,6 +2,9 @@ import './materials/stone';
 import './materials/sand';
 import './materials/water';
 import './materials/oil';
+import './materials/fire';
+import './materials/smoke';
+import './materials/steam';
 
 import { Grid } from './simulation/grid';
 import { Renderer } from './simulation/renderer';
