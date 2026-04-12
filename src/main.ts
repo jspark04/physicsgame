@@ -5,6 +5,8 @@ import './materials/oil';
 import './materials/fire';
 import './materials/smoke';
 import './materials/steam';
+import './materials/wood';
+import './materials/gunpowder';
 
 import { Grid } from './simulation/grid';
 import { Renderer } from './simulation/renderer';
