@@ -19,7 +19,8 @@ describe('updateOil', () => {
     g.set(2, 2, MaterialType.OIL);
     g.set(2, 3, MaterialType.WATER);
     update(2, 2, g);
-    expect(g.get(2, 2)).toBe(MaterialType.OIL);
+    // Water should not be displaced — density system prevents oil from sinking into water
+    expect(g.get(2, 3)).toBe(MaterialType.WATER);
   });
   it('water sinks through oil (water 1.0 > oil 0.8)', () => {
     const g = new Grid(5, 5);
