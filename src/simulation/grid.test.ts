@@ -64,6 +64,16 @@ describe('swap', () => {
     expect(grid.isUpdated(0, 0)).toBe(true);
     expect(grid.isUpdated(0, 1)).toBe(true);
   });
+  it('does not throw on out-of-bounds swap', () => {
+    expect(() => grid.swap(0, 0, -1, 0)).not.toThrow();
+    expect(() => grid.swap(0, 0, 10, 0)).not.toThrow();
+  });
+  it('does not change activeCellCount', () => {
+    grid.set(0, 0, MaterialType.SAND);
+    expect(grid.activeCellCount).toBe(1);
+    grid.swap(0, 0, 0, 1);
+    expect(grid.activeCellCount).toBe(1);
+  });
 });
 
 describe('temperature', () => {

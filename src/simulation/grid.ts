@@ -42,6 +42,7 @@ export class Grid {
   }
 
   swap(x1: number, y1: number, x2: number, y2: number): void {
+    if (!this.inBounds(x1, y1) || !this.inBounds(x2, y2)) return;
     const i1 = y1 * this.width + x1;
     const i2 = y2 * this.width + x2;
     let t = this.cells[i1];   this.cells[i1]    = this.cells[i2];    this.cells[i2]    = t;
@@ -102,8 +103,8 @@ export class Grid {
     const n = this.width * this.height;
     const out = new Uint8Array(8 + n + n * 4 + n);
     const view = new DataView(out.buffer);
-    view.setUint32(0, this.width);
-    view.setUint32(4, this.height);
+    view.setUint32(0, this.width, true);
+    view.setUint32(4, this.height, true);
     let off = 8;
     out.set(this.cells, off); off += n;
     out.set(new Uint8Array(this.temps.buffer, this.temps.byteOffset, n * 4), off); off += n * 4;
@@ -113,8 +114,8 @@ export class Grid {
 
   deserialize(data: Uint8Array): void {
     const view = new DataView(data.buffer, data.byteOffset);
-    const w = view.getUint32(0);
-    const h = view.getUint32(4);
+    const w = view.getUint32(0, true);
+    const h = view.getUint32(4, true);
     if (w !== this.width || h !== this.height) throw new Error(`Size mismatch: ${w}x${h}`);
     const n = this.width * this.height;
     let off = 8;
