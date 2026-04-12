@@ -69,6 +69,16 @@ describe('trySlide', () => {
     g.set(3, 2, MaterialType.STONE);
     expect(trySlide(2, 1, g)).toBe(false);
   });
+  it('respects flipped gravity', () => {
+    const g = new Grid(5, 5);
+    g.gravityDir = -1;
+    g.set(2, 3, MaterialType.SAND);
+    g.set(2, 2, MaterialType.STONE);
+    expect(trySlide(2, 3, g)).toBe(true);
+    expect(g.get(2, 3)).toBe(MaterialType.EMPTY);
+    const moved = g.get(1, 2) === MaterialType.SAND || g.get(3, 2) === MaterialType.SAND;
+    expect(moved).toBe(true);
+  });
 });
 
 describe('trySpread', () => {
@@ -113,5 +123,12 @@ describe('trySpreadGas', () => {
     g.set(2, 2, MaterialType.SMOKE);
     expect(trySpreadGas(2, 2, g)).toBe(true);
     expect(g.get(2, 2)).toBe(MaterialType.EMPTY);
+  });
+  it('returns false when both sides blocked', () => {
+    const g = new Grid(5, 5);
+    g.set(2, 2, MaterialType.SMOKE);
+    g.set(1, 2, MaterialType.STONE);
+    g.set(3, 2, MaterialType.STONE);
+    expect(trySpreadGas(2, 2, g)).toBe(false);
   });
 });

@@ -15,6 +15,7 @@ export function trySlide(x: number, y: number, grid: Grid): boolean {
   const ny = y + grid.gravityDir;
   if (!grid.inBounds(x, ny)) return false;
   const myDensity = grid.getDensity(x, y);
+  if (myDensity > grid.getDensity(x, ny)) return false; // straight fall still possible
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
     const nx = x + dx;
@@ -26,6 +27,8 @@ export function trySlide(x: number, y: number, grid: Grid): boolean {
   return false;
 }
 
+/** Lateral spread for liquids. Only displaces into EMPTY cells.
+ * Kept separate from trySpreadGas to allow future divergence (e.g. different spread distances). */
 export function trySpread(x: number, y: number, grid: Grid): boolean {
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
@@ -41,6 +44,7 @@ export function trySpread(x: number, y: number, grid: Grid): boolean {
 export function tryRise(x: number, y: number, grid: Grid): boolean {
   const ny = y - grid.gravityDir;
   if (!grid.inBounds(x, ny)) return false;
+  // Intentionally EMPTY-only: gases do not displace each other upward.
   if (grid.get(x, ny) === MaterialType.EMPTY) {
     grid.swap(x, y, x, ny);
     return true;
@@ -48,6 +52,8 @@ export function tryRise(x: number, y: number, grid: Grid): boolean {
   return false;
 }
 
+/** Lateral spread for gases. Only displaces into EMPTY cells.
+ * Kept separate from trySpread to allow future divergence (e.g. gas-into-gas displacement). */
 export function trySpreadGas(x: number, y: number, grid: Grid): boolean {
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
