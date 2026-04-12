@@ -5,6 +5,7 @@ import type { SimulationLoop } from '../simulation/loop';
 export class Controls {
   material: MaterialType = MaterialType.SAND;
   brushSize = 3;
+  onMaterialChange?: (t: MaterialType) => void;
 
   private painting = false;
   private erasing  = false;
@@ -105,6 +106,7 @@ export class Controls {
           const n = parseInt(e.key, 10);
           if (!isNaN(n) && n >= 1 && n <= PALETTE.length) {
             this.material = PALETTE[n - 1];
+            this.onMaterialChange?.(this.material);
           }
         }
       }

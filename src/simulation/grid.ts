@@ -120,6 +120,10 @@ export class Grid {
     const n = this.width * this.height;
     let off = 8;
     this.cells.set(data.subarray(off, off + n)); off += n;
+    const MATERIAL_MAX = 10; // update if MaterialType enum changes
+    for (let i = 0; i < n; i++) {
+      if (this.cells[i] > MATERIAL_MAX) this.cells[i] = 0;
+    }
     new Uint8Array(this.temps.buffer, this.temps.byteOffset, n * 4).set(data.subarray(off, off + n * 4)); off += n * 4;
     this.lifetimes.set(data.subarray(off, off + n));
     this.updated.fill(0);

@@ -15,11 +15,5 @@ registerHandler(MaterialType.OIL, (x, y, grid) => {
     return;
   }
 
-  // Oil floats on water - don't spread if water is directly below
-  const ny = y + grid.gravityDir;
-  if (grid.inBounds(x, ny) && grid.get(x, ny) === MaterialType.WATER) {
-    return;
-  }
-
   if (!tryFall(x, y, grid)) trySpread(x, y, grid);
 });

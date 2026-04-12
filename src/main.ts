@@ -26,6 +26,7 @@ const statusBar = new StatusBar(document.getElementById('statusbar')!);
 const controls  = new Controls(canvas, grid, loop);
 
 sidebar.onMaterialSelect = (t) => { controls.setMaterial(t); };
+controls.onMaterialChange = (t) => sidebar.selectMaterial(t);
 sidebar.onPauseToggle    = () => loop.togglePause();
 sidebar.onClear          = () => { if (confirm('Clear canvas?')) grid.clear(); };
 sidebar.onGravityFlip    = () => { grid.gravityDir = (grid.gravityDir === 1 ? -1 : 1); };

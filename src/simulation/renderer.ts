@@ -30,7 +30,9 @@ export class Renderer {
   }
 
   private cellColor(type: MaterialType, lifetime: number): [number, number, number] {
-    const base = MATERIAL_META[type].baseColor;
+    const meta = MATERIAL_META[type];
+    if (!meta) return [20, 20, 20]; // fallback for invalid types
+    const base = meta.baseColor;
     const n = () => Math.floor((Math.random() - 0.5) * 18);
 
     switch (type) {
