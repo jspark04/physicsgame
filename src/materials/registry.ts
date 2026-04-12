@@ -12,3 +12,6 @@ export function registerHandler(type: MaterialType, handler: MaterialHandler): v
 export function getHandler(type: MaterialType): MaterialHandler | undefined {
   return handlers.get(type);
 }
+
+/** Reset handler map — for test isolation only. */
+export function _resetForTests(): void { handlers.clear(); }

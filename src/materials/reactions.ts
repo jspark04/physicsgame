@@ -18,3 +18,6 @@ export function checkReaction(ax: number, ay: number, bx: number, by: number, gr
   if (handler) { handler(ax, ay, bx, by, grid); return true; }
   return false;
 }
+
+/** Reset reaction table — for test isolation only. */
+export function _resetForTests(): void { table.clear(); }
