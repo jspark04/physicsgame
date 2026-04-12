@@ -35,5 +35,5 @@ export const MATERIAL_META: Readonly<Record<MaterialType, MaterialMeta>> = {
 };
 
 export function getDensity(type: MaterialType): number {
-  return MATERIAL_META[type]?.density ?? 0;
+  return MATERIAL_META[type].density;
 }
