@@ -19,4 +19,11 @@ describe('water + fire reaction', () => {
     checkReaction(2, 2, 2, 3, g);
     expect(g.getTemp(2, 2)).toBeLessThan(50);
   });
+  it('extinguishes fire when fire is first argument (reverse order)', () => {
+    const g = new Grid(5, 5);
+    g.set(2, 3, MaterialType.FIRE); g.setLifetime(2, 3, 60);
+    g.set(2, 2, MaterialType.WATER);
+    checkReaction(2, 3, 2, 2, g);  // fire first, water second
+    expect(g.get(2, 3)).toBe(MaterialType.EMPTY);
+  });
 });

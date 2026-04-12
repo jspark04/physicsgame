@@ -3,10 +3,11 @@ import { registerHandler } from './registry';
 
 const IGNITION_TEMP = 100;
 const GROWTH_CHANCE = 0.02;
+const IGNITION_CHANCE = 0.12;
 
 registerHandler(MaterialType.PLANT, (x, y, grid) => {
   const temp = grid.getTemp(x, y);
-  if (temp >= IGNITION_TEMP && Math.random() < 0.12) {
+  if (temp >= IGNITION_TEMP && Math.random() < IGNITION_CHANCE) {
     grid.set(x, y, MaterialType.FIRE);
     grid.setLifetime(x, y, 25 + Math.floor(Math.random() * 25));
     grid.setTemp(x, y, 800);
