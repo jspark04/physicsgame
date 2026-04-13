@@ -30,7 +30,9 @@ describe('updateSalt', () => {
   it('does not dissolve without water', () => {
     const g = new Grid(5, 5);
     g.set(2, 2, MaterialType.SALT);
-    g.set(2, 3, MaterialType.STONE);
+    g.set(2, 3, MaterialType.STONE); // block below
+    g.set(1, 3, MaterialType.STONE); // block diagonal slides
+    g.set(3, 3, MaterialType.STONE);
     for (let i = 0; i < 200; i++) update(2, 2, g);
     expect(g.get(2, 2)).toBe(MaterialType.SALT);
   });
