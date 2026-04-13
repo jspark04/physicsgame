@@ -35,7 +35,10 @@ sidebar.onLoad           = (f) => controls.load(f);
 sidebar.onBrushChange    = (s) => controls.setBrushSize(s);
 sidebar.onSpeedChange    = (m) => loop.setSpeed(m);
 
-loop.onTick = () => statusBar.update(loop.fps, grid.activeCellCount, controls.material, controls.brushSize);
+loop.onTick = () => {
+  controls.tick();
+  statusBar.update(loop.fps, grid.activeCellCount, controls.material, controls.brushSize);
+};
 
 // Stone floor
 for (let x = 0; x < GRID_W; x++) grid.set(x, GRID_H - 1, MaterialType.STONE);

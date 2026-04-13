@@ -24,6 +24,12 @@ export class Controls {
   setMaterial(type: MaterialType): void { this.material = type; }
   setBrushSize(size: number): void { this.brushSize = Math.max(1, Math.min(20, size)); }
 
+  tick(): void {
+    if (this.painting && this.lastGX >= 0) {
+      this.paint(this.lastGX, this.lastGY, this.erasing);
+    }
+  }
+
   private toGrid(clientX: number, clientY: number): [number, number] {
     const rect = this.canvas.getBoundingClientRect();
     return [
