@@ -39,4 +39,16 @@ describe('updateSand', () => {
     expect(g.get(2, 3)).toBe(MaterialType.SAND);
     expect(g.get(2, 2)).toBe(MaterialType.WATER);
   });
+  it('transforms to glass when temp > 800 (probabilistic — 500 tries)', () => {
+    let formed = false;
+    for (let i = 0; i < 500; i++) {
+      const g = new Grid(5, 5);
+      g.set(2, 2, MaterialType.SAND);
+      g.setTemp(2, 2, 850);
+      g.set(2, 3, MaterialType.STONE); // block below so sand stays
+      update(2, 2, g);
+      if (g.get(2, 2) === MaterialType.GLASS) { formed = true; break; }
+    }
+    expect(formed).toBe(true);
+  });
 });
