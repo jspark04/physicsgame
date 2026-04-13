@@ -2,7 +2,7 @@ import { MaterialType } from './types';
 import { registerHandler } from './registry';
 
 const IGNITION_TEMP = 100;
-const GROWTH_CHANCE = 0.02;
+const GROWTH_CHANCE = 0.003;
 const IGNITION_CHANCE = 0.12;
 
 registerHandler(MaterialType.PLANT, (x, y, grid) => {

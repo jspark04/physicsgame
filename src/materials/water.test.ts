@@ -19,7 +19,10 @@ describe('updateWater', () => {
     g.set(2, 3, MaterialType.STONE);
     update(2, 2, g);
     expect(g.get(2, 2)).toBe(MaterialType.EMPTY);
-    expect(g.get(1, 2) === MaterialType.WATER || g.get(3, 2) === MaterialType.WATER).toBe(true);
+    // tryFlow moves to the furthest reachable cell, so check any lateral position
+    const movedLeft  = [0, 1].some(x => g.get(x, 2) === MaterialType.WATER);
+    const movedRight = [3, 4].some(x => g.get(x, 2) === MaterialType.WATER);
+    expect(movedLeft || movedRight).toBe(true);
   });
   it('converts to STEAM at 100°C', () => {
     const g = new Grid(5, 5);

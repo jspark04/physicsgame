@@ -41,6 +41,25 @@ export function trySpread(x: number, y: number, grid: Grid): boolean {
   return false;
 }
 
+/** Multi-cell lateral flow for water. Scans up to maxDist cells in each direction,
+ * moving to the furthest reachable empty cell. Gives fast leveling behaviour. */
+export function tryFlow(x: number, y: number, grid: Grid, maxDist: number = 6): boolean {
+  const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+  for (const dx of dirs) {
+    let best = -1;
+    for (let dist = 1; dist <= maxDist; dist++) {
+      const nx = x + dx * dist;
+      if (!grid.inBounds(nx, y) || grid.get(nx, y) !== MaterialType.EMPTY) break;
+      best = nx;
+    }
+    if (best !== -1) {
+      grid.swap(x, y, best, y);
+      return true;
+    }
+  }
+  return false;
+}
+
 export function tryRise(x: number, y: number, grid: Grid): boolean {
   const ny = y - grid.gravityDir;
   if (!grid.inBounds(x, ny)) return false;

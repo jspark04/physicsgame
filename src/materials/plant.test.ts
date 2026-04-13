@@ -7,9 +7,9 @@ import { getHandler } from './registry';
 const update = (x: number, y: number, g: Grid) => getHandler(MaterialType.PLANT)!(x, y, g);
 
 describe('updatePlant', () => {
-  it('spreads to adjacent empty cell (200 tries)', () => {
+  it('spreads to adjacent empty cell (2000 tries)', () => {
     let spread = false;
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 2000; i++) {
       const g = new Grid(5, 5);
       g.set(2, 2, MaterialType.PLANT);
       update(2, 2, g);

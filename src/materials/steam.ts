@@ -15,7 +15,7 @@ registerHandler(MaterialType.STEAM, (x, y, grid) => {
   if (temp > 20) grid.setTemp(x, y, temp - 1);
 
   const life = grid.getLifetime(x, y);
-  const decay = 1 + Math.floor(Math.random() * 2);
+  const decay = 1;
   if (life <= decay) {
     grid.set(x, y, MaterialType.EMPTY);
     return;

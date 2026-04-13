@@ -52,7 +52,7 @@ export class Controls {
         this.grid.setLifetime(nx, ny, 0);
         if (type === MaterialType.FIRE)  { this.grid.setLifetime(nx, ny, 80 + Math.floor(Math.random() * 40)); this.grid.setTemp(nx, ny, 900); }
         if (type === MaterialType.SMOKE) { this.grid.setLifetime(nx, ny, 100 + Math.floor(Math.random() * 60)); }
-        if (type === MaterialType.STEAM) { this.grid.setLifetime(nx, ny, 120 + Math.floor(Math.random() * 120)); }
+        if (type === MaterialType.STEAM) { this.grid.setLifetime(nx, ny, 600 + Math.floor(Math.random() * 600)); }
       }
     }
   }

@@ -1,6 +1,6 @@
 import { MaterialType } from './types';
 import { registerHandler } from './registry';
-import { tryFall, trySpread } from './movement';
+import { tryFall, tryFlow } from './movement';
 import { checkReaction } from './reactions';
 
 registerHandler(MaterialType.WATER, (x, y, grid) => {
@@ -8,7 +8,7 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
 
   if (temp >= 100) {
     grid.set(x, y, MaterialType.STEAM);
-    grid.setLifetime(x, y, 120 + Math.floor(Math.random() * 120));
+    grid.setLifetime(x, y, 600 + Math.floor(Math.random() * 600));
     grid.setTemp(x, y, 100);
     grid.markUpdated(x, y);
     return;
@@ -24,5 +24,5 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
     }
   }
 
-  if (!tryFall(x, y, grid)) trySpread(x, y, grid);
+  if (!tryFall(x, y, grid)) tryFlow(x, y, grid);
 });
