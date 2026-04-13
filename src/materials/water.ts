@@ -8,7 +8,7 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
 
   if (temp >= 100) {
     grid.set(x, y, MaterialType.STEAM);
-    grid.setLifetime(x, y, 40 + Math.floor(Math.random() * 40));
+    grid.setLifetime(x, y, 120 + Math.floor(Math.random() * 120));
     grid.setTemp(x, y, 100);
     grid.markUpdated(x, y);
     return;

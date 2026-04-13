@@ -42,9 +42,11 @@ export class Controls {
         const ny = gy + dy;
         if (!this.grid.inBounds(nx, ny)) continue;
         this.grid.set(nx, ny, type);
+        this.grid.setTemp(nx, ny, 20); // reset temperature — prevents hot-cell ghost state
+        this.grid.setLifetime(nx, ny, 0);
         if (type === MaterialType.FIRE)  { this.grid.setLifetime(nx, ny, 80 + Math.floor(Math.random() * 40)); this.grid.setTemp(nx, ny, 900); }
         if (type === MaterialType.SMOKE) { this.grid.setLifetime(nx, ny, 100 + Math.floor(Math.random() * 60)); }
-        if (type === MaterialType.STEAM) { this.grid.setLifetime(nx, ny, 50 + Math.floor(Math.random() * 30)); }
+        if (type === MaterialType.STEAM) { this.grid.setLifetime(nx, ny, 120 + Math.floor(Math.random() * 120)); }
       }
     }
   }
