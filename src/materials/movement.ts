@@ -42,15 +42,25 @@ export function trySpread(x: number, y: number, grid: Grid): boolean {
 }
 
 /** Multi-cell lateral flow for water. Scans up to maxDist cells in each direction,
- * moving to the furthest reachable empty cell. Gives fast leveling behaviour. */
-export function tryFlow(x: number, y: number, grid: Grid, maxDist: number = 6): boolean {
+ * moving only along supported surfaces (cells with solid floor below).
+ * Flows to an edge cell immediately and stops — water falls next tick. */
+export function tryFlow(x: number, y: number, grid: Grid, maxDist: number = 4): boolean {
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+  const by = y + grid.gravityDir;
+
   for (const dx of dirs) {
     let best = -1;
     for (let dist = 1; dist <= maxDist; dist++) {
       const nx = x + dx * dist;
       if (!grid.inBounds(nx, y) || grid.get(nx, y) !== MaterialType.EMPTY) break;
-      best = nx;
+      const floorDensity = grid.inBounds(nx, by) ? grid.getDensity(nx, by) : 1;
+      if (floorDensity > 0) {
+        best = nx; // solid surface below — valid; keep scanning for further spot
+      } else {
+        // edge — flow here so water pours off next tick
+        grid.swap(x, y, nx, y);
+        return true;
+      }
     }
     if (best !== -1) {
       grid.swap(x, y, best, y);
