@@ -5,8 +5,8 @@ import { tryRise, trySpreadGas } from './movement';
 registerHandler(MaterialType.STEAM, (x, y, grid) => {
   const temp = grid.getTemp(x, y);
 
-  // Condense back to water if cool enough
-  if (temp < 80 && Math.random() < 0.02) {
+  // Condense back to water only when genuinely cold
+  if (temp < 35 && Math.random() < 0.005) {
     grid.set(x, y, MaterialType.WATER);
     grid.markUpdated(x, y);
     return;
