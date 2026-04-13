@@ -5,6 +5,12 @@ import { registerHandler } from './registry';
 // Low enough that heat builds up visibly before water boils.
 const CONDUCTIVITY = 0.002;
 
+// When stone is adjacent to near-boiling water, endothermic vaporization
+// continuously drains heat from stone. This fraction of stone's excess heat
+// above 100°C is drained per adjacent near-boiling water cell per tick.
+const ENDO_DRAIN_FRACTION = 0.04;
+const ENDO_WATER_THRESHOLD = 90;
+
 registerHandler(MaterialType.STONE, (x, y, grid) => {
   const myTemp = grid.getTemp(x, y);
   if (myTemp <= 20) return; // at ambient — nothing to conduct
@@ -15,10 +21,19 @@ registerHandler(MaterialType.STONE, (x, y, grid) => {
     const nx = x + dx;
     const ny = y + dy;
     if (!grid.inBounds(nx, ny)) continue;
-    const delta = (myTemp - grid.getTemp(nx, ny)) * CONDUCTIVITY;
+
+    const neighborType = grid.get(nx, ny);
+    const neighborTemp = grid.getTemp(nx, ny);
+    const delta = (myTemp - neighborTemp) * CONDUCTIVITY;
     if (delta > 0) {
       grid.addTemp(nx, ny, delta);
       totalLoss += delta;
+    }
+
+    // Endothermic drain: near-boiling water continuously absorbs latent heat
+    // from the stone surface, creating a realistic cooling feedback loop.
+    if (neighborType === MaterialType.WATER && neighborTemp >= ENDO_WATER_THRESHOLD && myTemp > 100) {
+      totalLoss += (myTemp - 100) * ENDO_DRAIN_FRACTION;
     }
   }
   grid.addTemp(x, y, -totalLoss);

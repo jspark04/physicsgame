@@ -25,7 +25,7 @@ registerHandler(MaterialType.PLANT, (x, y, grid) => {
     const ny = y + dy;
     if (!grid.inBounds(nx, ny)) continue;
     const neighbor = grid.get(nx, ny);
-    if ((neighbor === MaterialType.EMPTY || neighbor === MaterialType.WATER) && Math.random() < GROWTH_CHANCE) {
+    if (neighbor === MaterialType.WATER && Math.random() < GROWTH_CHANCE) {
       grid.set(nx, ny, MaterialType.PLANT);
       grid.setTemp(nx, ny, grid.getTemp(x, y));
       break;
