@@ -19,10 +19,13 @@ registerHandler(MaterialType.OIL, (x, y, grid) => {
   if (tryFall(x, y, grid)) return;
   if (trySpread(x, y, grid)) return;
 
-  // Surface spread: when floating on water, scan laterally and displace water cells
-  // so oil fans out into a flat layer instead of staying as a spike.
+  // Surface spread: only when at the true oil-water interface.
+  // Water below AND not submerged (cell above is not water).
   const by = y + grid.gravityDir;
-  if (!grid.inBounds(x, by) || grid.get(x, by) !== MaterialType.WATER) return;
+  const aboveY = y - grid.gravityDir;
+  const atSurface = grid.inBounds(x, by) && grid.get(x, by) === MaterialType.WATER
+    && (!grid.inBounds(x, aboveY) || grid.get(x, aboveY) !== MaterialType.WATER);
+  if (!atSurface) return;
 
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
