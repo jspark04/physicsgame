@@ -4,6 +4,10 @@ import type { Grid } from '../simulation/grid';
 export function tryFall(x: number, y: number, grid: Grid): boolean {
   const ny = y + grid.gravityDir;
   if (!grid.inBounds(x, ny)) return false;
+  // Don't cascade-displace a particle that was already moved this tick —
+  // prevents buoyant particles (oil) from rising through an entire water column in one pass.
+  // Empty cells are always fillable even if "displaced" (they just became empty).
+  if (grid.get(x, ny) !== MaterialType.EMPTY && grid.isDisplaced(x, ny)) return false;
   if (grid.getDensity(x, y) > grid.getDensity(x, ny)) {
     grid.swap(x, y, x, ny);
     return true;

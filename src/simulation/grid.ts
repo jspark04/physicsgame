@@ -9,16 +9,18 @@ export class Grid {
   private temps: Float32Array;
   private lifetimes: Uint8Array;
   private updated: Uint8Array;
+  private displaced: Uint8Array; // set when a cell is moved via swap; clears each tick
   private _activeCount = 0;
 
   constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
     const n = width * height;
-    this.cells    = new Uint8Array(n);
-    this.temps    = new Float32Array(n).fill(20);
+    this.cells     = new Uint8Array(n);
+    this.temps     = new Float32Array(n).fill(20);
     this.lifetimes = new Uint8Array(n);
-    this.updated  = new Uint8Array(n);
+    this.updated   = new Uint8Array(n);
+    this.displaced = new Uint8Array(n);
   }
 
   get activeCellCount(): number { return this._activeCount; }
@@ -48,8 +50,10 @@ export class Grid {
     let t = this.cells[i1];   this.cells[i1]    = this.cells[i2];    this.cells[i2]    = t;
     let f = this.temps[i1];   this.temps[i1]    = this.temps[i2];    this.temps[i2]    = f;
     let l = this.lifetimes[i1]; this.lifetimes[i1] = this.lifetimes[i2]; this.lifetimes[i2] = l;
-    this.updated[i1] = 1;
-    this.updated[i2] = 1;
+    this.updated[i1]   = 1;
+    this.updated[i2]   = 1;
+    this.displaced[i1] = 1;
+    this.displaced[i2] = 1;
   }
 
   getTemp(x: number, y: number): number {
@@ -87,7 +91,12 @@ export class Grid {
     this.updated[y * this.width + x] = 1;
   }
 
-  clearUpdatedFlags(): void { this.updated.fill(0); }
+  isDisplaced(x: number, y: number): boolean {
+    if (!this.inBounds(x, y)) return false;
+    return this.displaced[y * this.width + x] !== 0;
+  }
+
+  clearUpdatedFlags(): void { this.updated.fill(0); this.displaced.fill(0); }
 
   getDensity(x: number, y: number): number { return getDensity(this.get(x, y)); }
 
@@ -96,6 +105,7 @@ export class Grid {
     this.temps.fill(20);
     this.lifetimes.fill(0);
     this.updated.fill(0);
+    this.displaced.fill(0);
     this._activeCount = 0;
   }
 
