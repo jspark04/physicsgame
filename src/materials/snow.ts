@@ -1,6 +1,6 @@
 import { MaterialType } from './types';
 import { registerHandler } from './registry';
-import { tryFall } from './movement';
+import { tryFall, trySlide } from './movement';
 
 registerHandler(MaterialType.SNOW, (x, y, grid) => {
   const temp = grid.getTemp(x, y);
@@ -14,5 +14,5 @@ registerHandler(MaterialType.SNOW, (x, y, grid) => {
     return;
   }
 
-  tryFall(x, y, grid);
+  if (!tryFall(x, y, grid)) trySlide(x, y, grid);
 });

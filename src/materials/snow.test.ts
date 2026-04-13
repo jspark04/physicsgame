@@ -28,9 +28,11 @@ describe('updateSnow', () => {
 
   it('does not melt when cold', () => {
     const g = new Grid(5, 5);
-    // Block below so it does not fall
+    // Block below and diagonals so it cannot fall or slide
     g.set(2, 2, MaterialType.SNOW);
     g.set(2, 3, MaterialType.STONE);
+    g.set(1, 3, MaterialType.STONE);
+    g.set(3, 3, MaterialType.STONE);
     g.setTemp(2, 2, 2);
     for (let i = 0; i < 200; i++) update(2, 2, g);
     expect(g.get(2, 2)).toBe(MaterialType.SNOW);
