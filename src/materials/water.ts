@@ -11,6 +11,10 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
     grid.setLifetime(x, y, 600 + Math.floor(Math.random() * 600));
     grid.setTemp(x, y, 100);
     grid.markUpdated(x, y);
+    // Endothermic: vaporization absorbs latent heat from neighbours
+    for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]] as [number, number][]) {
+      grid.addTemp(x + dx, y + dy, -25);
+    }
     return;
   }
 

@@ -8,7 +8,12 @@ registerHandler(MaterialType.STEAM, (x, y, grid) => {
   // Condense back to water only when genuinely cold
   if (temp < 35 && Math.random() < 0.005) {
     grid.set(x, y, MaterialType.WATER);
+    grid.setTemp(x, y, 30);
     grid.markUpdated(x, y);
+    // Exothermic: condensation releases latent heat to neighbours
+    for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]] as [number, number][]) {
+      grid.addTemp(x + dx, y + dy, 10);
+    }
     return;
   }
 
