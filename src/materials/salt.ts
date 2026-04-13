@@ -13,5 +13,5 @@ registerHandler(MaterialType.SALT, (x, y, grid) => {
     }
   }
 
-  tryFall(x, y, grid);
+  if (!tryFall(x, y, grid)) trySlide(x, y, grid);
 });
