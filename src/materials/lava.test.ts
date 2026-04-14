@@ -19,6 +19,9 @@ describe('updateLava', () => {
     const g = new Grid(5, 5);
     g.set(2, 2, MaterialType.LAVA);
     g.setTemp(2, 2, 1000);
+    // Block all movement so we're testing solidification, not flow
+    g.set(2, 3, MaterialType.STONE); g.set(1, 3, MaterialType.STONE); g.set(3, 3, MaterialType.STONE);
+    g.set(1, 2, MaterialType.STONE); g.set(3, 2, MaterialType.STONE);
     update(2, 2, g);
     expect(g.get(2, 2)).toBe(MaterialType.LAVA);
   });

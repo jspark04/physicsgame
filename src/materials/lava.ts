@@ -40,7 +40,7 @@ registerHandler(MaterialType.LAVA, (x, y, grid) => {
   // Passive cooling and slow flow
   const postTemp = grid.getTemp(x, y);
   grid.setTemp(x, y, Math.max(COOL_TEMP, postTemp - 0.5));
-  if (temp > 1100 && !tryFall(x, y, grid)) {
+  if (!tryFall(x, y, grid)) {
     if (Math.random() < 0.3) tryFlow(x, y, grid, 2);
   }
 });
