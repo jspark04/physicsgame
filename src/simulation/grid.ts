@@ -7,7 +7,7 @@ export class Grid {
 
   private cells: Uint8Array;
   private temps: Float32Array;
-  private lifetimes: Uint8Array;
+  private lifetimes: Uint16Array; // up to 65535 ticks (~18 min at 60fps)
   private updated: Uint8Array;
   private displaced: Uint8Array; // set when a cell is moved via swap; clears each tick
   private _activeCount = 0;
@@ -18,7 +18,7 @@ export class Grid {
     const n = width * height;
     this.cells     = new Uint8Array(n);
     this.temps     = new Float32Array(n).fill(20);
-    this.lifetimes = new Uint8Array(n);
+    this.lifetimes = new Uint16Array(n);
     this.updated   = new Uint8Array(n);
     this.displaced = new Uint8Array(n);
   }
@@ -78,7 +78,7 @@ export class Grid {
 
   setLifetime(x: number, y: number, value: number): void {
     if (!this.inBounds(x, y)) return;
-    this.lifetimes[y * this.width + x] = Math.max(0, Math.min(255, value));
+    this.lifetimes[y * this.width + x] = Math.max(0, Math.min(65535, value));
   }
 
   isUpdated(x: number, y: number): boolean {
@@ -111,14 +111,15 @@ export class Grid {
 
   serialize(): Uint8Array {
     const n = this.width * this.height;
-    const out = new Uint8Array(8 + n + n * 4 + n);
+    // Format: 8 header + n cells + n*4 temps + n*2 lifetimes (Uint16, little-endian)
+    const out = new Uint8Array(8 + n + n * 4 + n * 2);
     const view = new DataView(out.buffer);
     view.setUint32(0, this.width, true);
     view.setUint32(4, this.height, true);
     let off = 8;
     out.set(this.cells, off); off += n;
     out.set(new Uint8Array(this.temps.buffer, this.temps.byteOffset, n * 4), off); off += n * 4;
-    out.set(this.lifetimes, off);
+    out.set(new Uint8Array(this.lifetimes.buffer, this.lifetimes.byteOffset, n * 2), off);
     return out;
   }
 
@@ -130,12 +131,12 @@ export class Grid {
     const n = this.width * this.height;
     let off = 8;
     this.cells.set(data.subarray(off, off + n)); off += n;
-    const MATERIAL_MAX = 10; // update if MaterialType enum changes
+    const MATERIAL_MAX = Object.values(MaterialType).filter(v => typeof v === 'number').length - 1;
     for (let i = 0; i < n; i++) {
       if (this.cells[i] > MATERIAL_MAX) this.cells[i] = 0;
     }
     new Uint8Array(this.temps.buffer, this.temps.byteOffset, n * 4).set(data.subarray(off, off + n * 4)); off += n * 4;
-    this.lifetimes.set(data.subarray(off, off + n));
+    new Uint8Array(this.lifetimes.buffer, this.lifetimes.byteOffset, n * 2).set(data.subarray(off, off + n * 2));
     this.updated.fill(0);
     this._activeCount = 0;
     for (let i = 0; i < n; i++) {

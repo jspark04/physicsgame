@@ -7,16 +7,29 @@ import { getHandler } from './registry';
 const update = (x: number, y: number, g: Grid) => getHandler(MaterialType.PLANT)!(x, y, g);
 
 describe('updatePlant', () => {
-  it('spreads to adjacent empty cell (2000 tries)', () => {
+  it('spreads to adjacent water cell (2000 tries)', () => {
     let spread = false;
     for (let i = 0; i < 2000; i++) {
       const g = new Grid(5, 5);
       g.set(2, 2, MaterialType.PLANT);
+      g.set(2, 1, MaterialType.WATER);
+      update(2, 2, g);
+      if (g.get(2, 1) === MaterialType.PLANT) { spread = true; break; }
+    }
+    expect(spread).toBe(true);
+  });
+
+  it('does not spread into empty cells', () => {
+    let spread = false;
+    for (let i = 0; i < 500; i++) {
+      const g = new Grid(5, 5);
+      g.set(2, 2, MaterialType.PLANT);
+      // all neighbors are EMPTY — plant should not spread
       update(2, 2, g);
       const neighbors: [number,number][] = [[2,1],[2,3],[1,2],[3,2]];
       if (neighbors.some(([nx,ny]) => g.get(nx,ny) === MaterialType.PLANT)) { spread = true; break; }
     }
-    expect(spread).toBe(true);
+    expect(spread).toBe(false);
   });
   it('does not spread when all neighbors blocked', () => {
     const g = new Grid(5, 5);

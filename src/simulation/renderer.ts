@@ -56,6 +56,18 @@ export class Renderer {
         const d = n();
         return [Math.max(0, base[0] + d), Math.max(0, base[1] + d), Math.min(255, base[2] + d)];
       }
+      case MaterialType.LAVA: {
+        const flicker = Math.floor(Math.random() * 30);
+        return [Math.min(255, 220 + flicker), Math.max(0, 60 - flicker), 0];
+      }
+      case MaterialType.ICE: {
+        const s = Math.floor(Math.random() * 8);
+        return [173 + s, 216 + s, Math.min(255, 230 + s)];
+      }
+      case MaterialType.SNOW: {
+        const s = Math.floor(Math.random() * 15);
+        return [Math.min(255, 230 + s), Math.min(255, 240 + s), 255];
+      }
       default:
         return [base[0], base[1], base[2]];
     }
