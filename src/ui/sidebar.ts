@@ -1,11 +1,12 @@
 import { MaterialType, MATERIAL_META } from '../materials/types';
 
 const GROUPS: { label: string; types: MaterialType[] }[] = [
-  { label: 'POWDERS', types: [MaterialType.SAND, MaterialType.GUNPOWDER] },
-  { label: 'LIQUIDS', types: [MaterialType.WATER, MaterialType.OIL] },
-  { label: 'SOLIDS',  types: [MaterialType.STONE, MaterialType.WOOD] },
+  { label: 'POWDERS', types: [MaterialType.SAND, MaterialType.GUNPOWDER, MaterialType.SALT, MaterialType.SNOW] },
+  { label: 'LIQUIDS', types: [MaterialType.WATER, MaterialType.OIL, MaterialType.LAVA, MaterialType.ACID] },
+  { label: 'SOLIDS',  types: [MaterialType.STONE, MaterialType.WOOD, MaterialType.ICE, MaterialType.GLASS, MaterialType.TNT] },
   { label: 'GASES',   types: [MaterialType.FIRE, MaterialType.SMOKE, MaterialType.STEAM] },
   { label: 'LIFE',    types: [MaterialType.PLANT] },
+  { label: 'SOURCES', types: [MaterialType.WATER_SOURCE, MaterialType.FIRE_SOURCE] },
 ];
 
 export class Sidebar {
