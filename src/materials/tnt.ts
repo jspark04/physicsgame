@@ -36,7 +36,11 @@ registerHandler(MaterialType.TNT, (x, y, grid) => {
         grid.set(ex, ey, MaterialType.EMPTY);
         grid.setTemp(ex, ey, 20);
         grid.markUpdated(ex, ey);
-      } else if (grid.get(ex, ey) === MaterialType.EMPTY && Math.random() < 0.5) {
+      } else if (cell === MaterialType.GLASS) {
+        // Shockwave shatters glass into sand in the outer ring
+        grid.set(ex, ey, MaterialType.SAND);
+        grid.markUpdated(ex, ey);
+      } else if (cell === MaterialType.EMPTY && Math.random() < 0.5) {
         // Blast ring: scatter fire
         grid.set(ex, ey, MaterialType.FIRE);
         grid.setLifetime(ex, ey, 20 + Math.floor(Math.random() * 31));

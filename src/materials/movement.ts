@@ -82,6 +82,15 @@ export function tryRise(x: number, y: number, grid: Grid): boolean {
     grid.swap(x, y, x, ny);
     return true;
   }
+  // Diagonal rise when blocked directly above — prevents gas piling at slopes.
+  const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+  for (const dx of dirs) {
+    const nx = x + dx;
+    if (grid.inBounds(nx, ny) && grid.get(nx, ny) === MaterialType.EMPTY) {
+      grid.swap(x, y, nx, ny);
+      return true;
+    }
+  }
   return false;
 }
 

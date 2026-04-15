@@ -8,7 +8,7 @@ registerHandler(MaterialType.LAVA, (x, y, grid) => {
   const temp = grid.getTemp(x, y);
 
   // Cool to stone when cold enough
-  if (temp < COOL_TEMP) {
+  if (temp <= COOL_TEMP) {
     grid.set(x, y, MaterialType.STONE);
     grid.setTemp(x, y, temp);
     grid.markUpdated(x, y);

@@ -104,10 +104,12 @@ describe('tryRise', () => {
     expect(tryRise(2, 3, g)).toBe(true);
     expect(g.get(2, 2)).toBe(MaterialType.SMOKE);
   });
-  it('does not rise when above is occupied', () => {
+  it('does not rise when above and diagonals are occupied', () => {
     const g = new Grid(5, 5);
     g.set(2, 3, MaterialType.SMOKE);
-    g.set(2, 2, MaterialType.STONE);
+    g.set(2, 2, MaterialType.STONE); // directly above
+    g.set(1, 2, MaterialType.STONE); // diagonal up-left
+    g.set(3, 2, MaterialType.STONE); // diagonal up-right
     expect(tryRise(2, 3, g)).toBe(false);
   });
   it('does not rise at top edge', () => {

@@ -16,6 +16,23 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
 
   if (temp > 20) grid.setTemp(x, y, temp - 0.5);
 
+  // Diffuse salinity (stored in lifetime) to neighbouring water cells
+  const salinity = grid.getLifetime(x, y);
+  if (salinity > 0 && Math.random() < 0.1) {
+    const dirs = [[0,-1],[0,1],[-1,0],[1,0]] as [number,number][];
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx, ny = y + dy;
+      if (grid.inBounds(nx, ny) && grid.get(nx, ny) === MaterialType.WATER) {
+        const ns = grid.getLifetime(nx, ny);
+        if (ns < salinity) {
+          grid.setLifetime(x, y, salinity - 1);
+          grid.setLifetime(nx, ny, ns + 1);
+          break;
+        }
+      }
+    }
+  }
+
   // Extinguish adjacent fire
   for (const [dx, dy] of [[0,-1],[0,1],[-1,0],[1,0]] as [number,number][]) {
     if (grid.inBounds(x+dx, y+dy) && grid.get(x+dx, y+dy) === MaterialType.FIRE) {

@@ -13,6 +13,7 @@ import './lava';
 import './acid';
 import './salt';
 import './snow';
+import './glass';
 import './tnt';
 import './water_source';
 import './fire_source';
