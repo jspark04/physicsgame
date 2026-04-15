@@ -15,11 +15,14 @@ registerHandler(MaterialType.LAVA, (x, y, grid) => {
     return;
   }
 
-  // Radiate heat to all 8 neighbours
+  // Radiate heat to all 8 neighbours (skip other lava cells — same-pool cells
+  // don't exchange heat, and mutual radiation would prevent cooling)
   for (let dy = -1; dy <= 1; dy++) {
     for (let dx = -1; dx <= 1; dx++) {
       if (dx === 0 && dy === 0) continue;
-      grid.addTemp(x + dx, y + dy, 15 + Math.random() * 15);
+      const nx = x + dx; const ny = y + dy;
+      if (!grid.inBounds(nx, ny) || grid.get(nx, ny) === MaterialType.LAVA) continue;
+      grid.addTemp(nx, ny, 15 + Math.random() * 15);
     }
   }
 
