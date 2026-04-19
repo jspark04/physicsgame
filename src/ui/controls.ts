@@ -53,6 +53,7 @@ export class Controls {
         if (type === MaterialType.FIRE)  { this.grid.setLifetime(nx, ny, 80 + Math.floor(Math.random() * 40)); this.grid.setTemp(nx, ny, 900); }
         if (type === MaterialType.SMOKE) { this.grid.setLifetime(nx, ny, 100 + Math.floor(Math.random() * 60)); }
         if (type === MaterialType.STEAM) { this.grid.setLifetime(nx, ny, 600 + Math.floor(Math.random() * 600)); }
+        if (type === MaterialType.LAVA)  { this.grid.setTemp(nx, ny, 1200); }
       }
     }
   }
@@ -97,6 +98,9 @@ export class Controls {
       MaterialType.SAND, MaterialType.WATER, MaterialType.FIRE,
       MaterialType.SMOKE, MaterialType.GUNPOWDER, MaterialType.PLANT,
       MaterialType.WOOD, MaterialType.OIL, MaterialType.STEAM, MaterialType.STONE,
+      MaterialType.ICE, MaterialType.LAVA, MaterialType.ACID, MaterialType.SALT,
+      MaterialType.SNOW, MaterialType.GLASS, MaterialType.TNT,
+      MaterialType.WATER_SOURCE, MaterialType.FIRE_SOURCE,
     ];
     window.addEventListener('keydown', (e) => {
       if (e.target instanceof HTMLInputElement) return;
