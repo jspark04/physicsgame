@@ -137,6 +137,12 @@ export class Grid {
     }
     new Uint8Array(this.temps.buffer, this.temps.byteOffset, n * 4).set(data.subarray(off, off + n * 4)); off += n * 4;
     new Uint8Array(this.lifetimes.buffer, this.lifetimes.byteOffset, n * 2).set(data.subarray(off, off + n * 2));
+    // Sanitize floats — corrupt saves can inject NaN/Infinity which would propagate via addTemp
+    for (let i = 0; i < n; i++) {
+      if (!isFinite(this.temps[i]) || this.temps[i] < -273 || this.temps[i] > 10000) {
+        this.temps[i] = 20;
+      }
+    }
     this.updated.fill(0);
     this._activeCount = 0;
     for (let i = 0; i < n; i++) {

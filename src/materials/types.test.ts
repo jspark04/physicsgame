@@ -7,7 +7,10 @@ describe('MATERIAL_META', () => {
       MaterialType.EMPTY, MaterialType.SAND, MaterialType.WATER,
       MaterialType.FIRE, MaterialType.SMOKE, MaterialType.GUNPOWDER,
       MaterialType.PLANT, MaterialType.WOOD, MaterialType.OIL,
-      MaterialType.STEAM, MaterialType.STONE,
+      MaterialType.STEAM, MaterialType.STONE, MaterialType.ICE,
+      MaterialType.LAVA, MaterialType.ACID, MaterialType.SALT,
+      MaterialType.SNOW, MaterialType.GLASS, MaterialType.TNT,
+      MaterialType.WATER_SOURCE, MaterialType.FIRE_SOURCE,
     ];
     for (const t of types) {
       expect(MATERIAL_META[t]).toBeDefined();
