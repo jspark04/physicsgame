@@ -3,7 +3,10 @@ import { registerHandler } from './registry';
 
 // Fraction of temperature difference transferred to each neighbor per tick.
 // Low enough that heat builds up visibly before water boils.
-const CONDUCTIVITY = 0.002;
+// Raised from 0.002 so hot stone (e.g. freshly solidified lava at ~299°C)
+// decisively overcomes water's self-cooling and brings adjacent water to
+// boiling point in ~1–2 seconds rather than ~23 seconds.
+const CONDUCTIVITY = 0.006;
 
 // When stone is adjacent to near-boiling water, endothermic vaporization
 // continuously drains heat from stone. This fraction of stone's excess heat
