@@ -14,7 +14,10 @@ registerHandler(MaterialType.WATER, (x, y, grid) => {
     return;
   }
 
-  if (temp > 20) grid.setTemp(x, y, temp - 0.5);
+  // Gentle self-cooling so water holds heat from genuine contact (e.g. hot
+  // stone beneath it) rather than instantly dissipating it. Was 0.5 which
+  // nearly cancelled stone's conductivity and prevented boiling.
+  if (temp > 20) grid.setTemp(x, y, temp - 0.1);
 
   // Diffuse salinity (stored in lifetime) to neighbouring water cells
   const salinity = grid.getLifetime(x, y);

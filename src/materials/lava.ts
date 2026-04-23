@@ -15,14 +15,21 @@ registerHandler(MaterialType.LAVA, (x, y, grid) => {
     return;
   }
 
-  // Radiate heat to all 8 neighbours (skip other lava cells — same-pool cells
-  // don't exchange heat, and mutual radiation would prevent cooling)
+  // Bidirectional heat conduction to material neighbours (skip other lava
+  // cells — same-pool cells don't exchange heat, and mutual radiation would
+  // prevent cooling).
   for (let dy = -1; dy <= 1; dy++) {
     for (let dx = -1; dx <= 1; dx++) {
       if (dx === 0 && dy === 0) continue;
-      const nx = x + dx; const ny = y + dy;
-      if (!grid.inBounds(nx, ny) || grid.get(nx, ny) === MaterialType.LAVA) continue;
-      grid.addTemp(nx, ny, 15 + Math.random() * 15);
+      const nx = x + dx, ny = y + dy;
+      if (!grid.inBounds(nx, ny)) continue;
+      const nType = grid.get(nx, ny);
+      if (nType === MaterialType.EMPTY || nType === MaterialType.LAVA) continue;
+      const diff = grid.getTemp(x, y) - grid.getTemp(nx, ny);
+      if (diff <= 0) continue;
+      const xfer = Math.min(diff * 0.003, 5);
+      grid.addTemp(nx, ny, xfer);
+      grid.addTemp(x, y, -xfer);
     }
   }
 
@@ -40,9 +47,11 @@ registerHandler(MaterialType.LAVA, (x, y, grid) => {
     }
   }
 
-  // Passive cooling and slow flow
-  const postTemp = grid.getTemp(x, y);
-  grid.setTemp(x, y, Math.max(COOL_TEMP, postTemp - 0.5));
+  // Passive ambient cooling (baseline for open air) and slow flow.
+  // Kept small so isolated/interior lava cells stay molten for tens of
+  // seconds — active quenching (snow, water, ice conduction) does the
+  // heavy lifting via the bidirectional exchange above.
+  grid.addTemp(x, y, -0.3);
   if (!tryFall(x, y, grid)) {
     if (Math.random() < 0.3) tryFlow(x, y, grid, 2);
   }

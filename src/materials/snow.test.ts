@@ -10,7 +10,7 @@ describe('updateSnow', () => {
   it('falls into empty cell below', () => {
     const g = new Grid(5, 5);
     g.set(2, 2, MaterialType.SNOW);
-    g.setTemp(2, 2, 2); // below melt threshold so it falls rather than melts
+    g.setTemp(2, 2, 0); // explicitly cold — melt chance is 0, tests only fall logic
     update(2, 2, g);
     expect(g.get(2, 3)).toBe(MaterialType.SNOW);
   });

@@ -11,4 +11,6 @@ registerReaction(MaterialType.WATER, MaterialType.FIRE, (ax, ay, bx, by, grid) =
   grid.set(fireX, fireY, MaterialType.EMPTY);
   grid.setTemp(fireX, fireY, 20);
   grid.setTemp(waterX, waterY, Math.max(20, grid.getTemp(waterX, waterY) - 15));
+  grid.markUpdated(fireX, fireY);
+  grid.markUpdated(waterX, waterY);
 });

@@ -51,6 +51,7 @@ export function trySpread(x: number, y: number, grid: Grid): boolean {
 export function tryFlow(x: number, y: number, grid: Grid, maxDist: number = 4): boolean {
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   const by = y + grid.gravityDir;
+  const myDensity = grid.getDensity(x, y);
 
   for (const dx of dirs) {
     let best = -1;
@@ -58,8 +59,8 @@ export function tryFlow(x: number, y: number, grid: Grid, maxDist: number = 4): 
       const nx = x + dx * dist;
       if (!grid.inBounds(nx, y) || grid.get(nx, y) !== MaterialType.EMPTY) break;
       const floorDensity = grid.inBounds(nx, by) ? grid.getDensity(nx, by) : 1;
-      if (floorDensity > 0) {
-        best = nx; // solid surface below — valid; keep scanning for further spot
+      if (floorDensity >= myDensity) {
+        best = nx; // surface dense enough to support this liquid — keep scanning
       } else {
         // edge — flow here so water pours off next tick
         grid.swap(x, y, nx, y);
